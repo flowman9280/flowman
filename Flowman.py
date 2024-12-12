@@ -3,6 +3,8 @@ import pygame
 
 COLOR = (255, 100, 98)
 RED = (255, 0, 0)
+WHITE = (255, 255 ,255)
+BLUE = (0 , 255 ,0 )
 SURFACE_COLOR = (167, 255, 100)
 WIDTH = 500
 HEIGHT = 500
