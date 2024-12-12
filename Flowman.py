@@ -1,14 +1,3 @@
-
-import random
-import pygame
- 
-# Global Variables
-COLOR = (255, 100, 98)
-SURFACE_COLOR = (167, 255, 100)
-WIDTH = 500
-HEIGHT = 500
- 
-# Object class
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, color, height, width):
         super().__init__()
@@ -22,7 +11,7 @@ class Sprite(pygame.sprite.Sprite):
                          pygame.Rect(0, 0, width, height))
  
         self.rect = self.image.get_rect()
-        self.image = pygame.image.load("C:\\Users\\TODOROV\\Documents\\flowman\\flowman\\rsrc\\pac-man original.png")
+        self.image = pygame.image.load("Sprite\pac-man original.png")
  
     def moveRight(self, pixels):
         self.rect.x += pixels
@@ -35,25 +24,14 @@ class Sprite(pygame.sprite.Sprite):
  
     def moveBack(self, speed):
         self.rect.y -= speed * speed/10
- 
- 
-pygame.init()
- 
- 
-RED = (255, 0, 0)
- 
- 
-size = (WIDTH, HEIGHT)
-screen = pygame.display.set_mode(size)
+
 pygame.display.set_caption("Creating Sprite")
- 
  
 all_sprites_list = pygame.sprite.Group()
  
 playerCar = Sprite(RED, 20, 30)
 playerCar.rect.x = 200
 playerCar.rect.y = 300
- 
  
 all_sprites_list.add(playerCar)
  
@@ -83,5 +61,3 @@ while exit:
     all_sprites_list.draw(screen)
     pygame.display.flip()
     clock.tick(60)
- 
-pygame.quit()
