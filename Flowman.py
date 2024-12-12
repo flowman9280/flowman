@@ -1,3 +1,16 @@
+import random
+import pygame
+
+COLOR = (255, 100, 98)
+RED = (255, 0, 0)
+SURFACE_COLOR = (167, 255, 100)
+WIDTH = 500
+HEIGHT = 500
+
+size = (WIDTH, HEIGHT)
+
+pygame.init()
+screen = pygame.display.set_mode(size)
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, color, height, width):
         super().__init__()
@@ -61,3 +74,5 @@ while exit:
     all_sprites_list.draw(screen)
     pygame.display.flip()
     clock.tick(60)
+
+pygame.quit()
