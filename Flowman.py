@@ -14,16 +14,18 @@ pygame.display.set_caption("Creating Sprite")
 exit = True
 clock = pygame.time.Clock()
 
+skelette = pygame.image.load("Sprite\squelette.png")
+flowman = pygame.image.load("Sprite\pac-man original.png")
 
-posX: int = 0
-posY: int = 0
+posX = 0
+posY = 0
 
 map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1, 1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1, 1, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -32,19 +34,19 @@ map = [
 ]
 
 def move_up():
-    newPos: int = posY - 1
+    newPos = posY - 1
     if map[posY][posX] != 1:
         posY = newPos
 def move_down():
-    newPos: int = posY + 1
+    newPos = posY + 1
     if map[posY][posX] != 1:
         posY = newPos
 def move_left():
-    newPos: int = posX - 1
+    newPos = posX - 1
     if map[posY][posX] != 1:
         posX = newPos
 def move_right():
-    newPos: int = posX + 1
+    newPos = posX + 1
     if map[posY][posX] != 1:
         posX = newPos
 
@@ -65,11 +67,24 @@ while exit:
                 move_up()
             if event.key == pygame.K_DOWN:
                 move_down()
-    
-    for rows in map:
-        for cell in rows:
+
+    newMap = map
+    newMap[posY][posX] = 8
+
+    x: int = 0
+    y: int = 0
+    for columns in map:
+        y+=1
+        x=0
+        for cell in columns:
+            x+=1
             match cell:
-                pass
+                case 1:
+                    screen.blit(skelette, (x*30, y*30))
+                case 2:
+                    pass
+                case 8:
+                    screen.blit(flowman, (x*30, y*30))
 
     
 
