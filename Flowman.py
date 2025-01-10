@@ -5,8 +5,8 @@ RED = (255, 0, 0)
 WHITE = (255, 255 ,255)
 BLUE = (0 , 255 ,0 )
 SURFACE_COLOR = (167, 255, 100)
-WIDTH = 500
-HEIGHT = 500
+WIDTH = 512
+HEIGHT = 512
 size = (WIDTH, HEIGHT)
 pygame.init()
 screen = pygame.display.set_mode(size)
@@ -17,8 +17,9 @@ clock = pygame.time.Clock()
 skelette = pygame.image.load("Sprite\squelette.png")
 flowman = pygame.image.load("Sprite\pac-man original.png")
 
-posX = 0
-posY = 0
+posX = 1
+posY = 1
+newPos = 0
 
 map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -34,20 +35,24 @@ map = [
 ]
 
 def move_up():
-    newPos = posY - 1
-    if map[posY][posX] != 1:
+    global posY
+    newPos = (posY - 1)
+    if map[posY-1][posX] != 1:
         posY = newPos
 def move_down():
-    newPos = posY + 1
-    if map[posY][posX] != 1:
+    global posY
+    newPos = (posY + 1)
+    if map[posY+1][posX] != 1:
         posY = newPos
 def move_left():
-    newPos = posX - 1
-    if map[posY][posX] != 1:
+    global posX
+    newPos = (posX - 1)
+    if map[posY][posX-1] != 1:
         posX = newPos
 def move_right():
-    newPos = posX + 1
-    if map[posY][posX] != 1:
+    global posX
+    newPos = (posX + 1)
+    if map[posY][posX+1] != 1:
         posX = newPos
 
 while exit:
