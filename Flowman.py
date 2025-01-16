@@ -77,7 +77,9 @@ def move_right():
         posX = newPos
 
 while exit:
-    screen.fill((0, 0, 0))
+
+    screen.fill((255, 255, 255))
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
