@@ -1,5 +1,6 @@
 import random
 import pygame
+import time
 from spritesheet import spritesheet
 COLOR = (255, 100, 98)
 RED = (255, 0, 0)
@@ -26,6 +27,7 @@ mur = pygame.image.load("flow_man sprite\decor\pac-mur.png")
 posX = 1
 posY = 1
 newPos = 0
+face = 1
 
 map = [
     [3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3],
@@ -76,11 +78,14 @@ def move_right():
     if map[posY][posX+1] != 3:
         posX = newPos
 
+
+
+
+
 while exit:
-
-    screen.fill((255, 255, 255))
-
-
+    time.sleep(0.15)
+    screen.fill((0, 0, 0))
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit = False
@@ -90,13 +95,22 @@ while exit:
         
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                move_left()
+                face = 1
             if event.key == pygame.K_RIGHT:
-                move_right()
+                face = 3
             if event.key == pygame.K_UP:
-                move_up()
+                face = 4
             if event.key == pygame.K_DOWN:
-                move_down()
+                face = 2
+
+    if face == 1 :
+        move_left()
+    elif face == 3 :
+        move_right()
+    elif face == 4 :
+        move_up()
+    elif face == 2 :
+        move_down()
 
     y: int = -1
     for columns in map:
