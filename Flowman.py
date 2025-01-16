@@ -56,22 +56,22 @@ map = [
 def move_up():
     global posY
     newPos = (posY - 1)
-    if map[posY-2][posX] != 1:
+    if map[posY-1][posX] != 3:
         posY = newPos
 def move_down():
     global posY
     newPos = (posY + 1)
-    if map[posY+2][posX] != 1:
+    if map[posY+1][posX] != 3:
         posY = newPos
 def move_left():
     global posX
     newPos = (posX - 1)
-    if map[posY][posX-2] != 1:
+    if map[posY][posX-1] != 3:
         posX = newPos
 def move_right():
     global posX
     newPos = (posX + 1)
-    if map[posY][posX+2] != 1:
+    if map[posY][posX+1] != 3:
         posX = newPos
 
 while exit:
@@ -94,7 +94,6 @@ while exit:
             if event.key == pygame.K_DOWN:
                 move_down()
 
-    x: int = -1
     y: int = -1
     for columns in map:
         y+=1
