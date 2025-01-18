@@ -2,9 +2,10 @@
 import random, pygame, time
 from map import map
 from spritesheet import spritesheet
+from ennemy import Enemy
 
 # CONSTANTS
-GAMECLOCK = 0.1
+GAMECLOCK = 0.15
 COLOR = (255, 100, 98)
 RED = (255, 0, 0)
 WHITE = (255, 255 ,255)
@@ -22,6 +23,7 @@ pygame.display.set_caption("Creating Sprite")
 clock = pygame.time.Clock()
 
 # Content loading
+eye = pygame.image.load("Sprite\Skelette2.png")
 skelette = pygame.image.load("Sprite\squelette.png")
 mur = pygame.image.load("flow_man sprite\decor\pac-mur.png")
 flowman = spritesheet("flow_man sprite\\flowman.png")
@@ -32,6 +34,8 @@ posX = 20
 posY = 14
 newPos = 0
 face = 1
+animationIndexX = 0
+animationIndexY = 0
 
 # Flowman functions
 def move_up():
@@ -66,11 +70,33 @@ def rage():
     print("ok")
 
 
-# CELLS : 0-PELLET 3-MUR
+def rot_center(image, rect, angle):
+    rot_image = pygame.transform.rotate(image, angle)
+    rot_rect = rot_image.get_rect(center=rect.center)
+    return rot_image,rot_rect
+
+one = Enemy(1, 1, map)
+
+# CELLS : 1-PACGUM 0-PELLET 3-MUR
 running = True
 while running:
     time.sleep(GAMECLOCK)
     screen.fill(BACKGROUND_COLOR)
+
+    char_images = flowman.image_at((animationIndexX*32, animationIndexY*32, 32, 32))
+
+    one.step()
+
+    animationIndexX += 1
+
+    if animationIndexX == 2:
+        animationIndexY += 1
+        animationIndexX = 0
+
+    if animationIndexY == 2:
+        animationIndexY = 0
+        animationIndexX = 0
+
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -94,12 +120,16 @@ while running:
 
     match face:
         case 1:
+            char_images = rot_center(char_images, pygame.Rect(0, 0, 32, 32), 180)[0]
             move_left()
         case 2:
+            char_images = rot_center(char_images, pygame.Rect(0, 0, 32, 32), -90)[0]
             move_down()
         case 3:
+            char_images = rot_center(char_images, pygame.Rect(0, 0, 32, 32), 0)[0]
             move_right()
         case 4:
+            char_images = rot_center(char_images, pygame.Rect(0, 0, 32, 32), 90)[0]
             move_up()
 
     y = -1
@@ -110,6 +140,8 @@ while running:
             x += 1
             if (x == posX) and (y == posY):
                 screen.blit(char_images, (x*32, y*32))
+            if (x == one.posX) and (y == one.posY):
+                screen.blit(eye, (x*32, y*32))
             else:
                 match cell:
                     case 3:
