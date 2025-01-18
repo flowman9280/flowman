@@ -1,25 +1,54 @@
 import random
+import math
+from map import map
 
 class Enemy():
     posY = 0
     posX = 0
-    path = [[]]
 
-    def __init__(self, posX, posY, map):
+    def __init__(self, posX, posY):
         self.posX = posX
         self.posY = posY
-        self.path = map
 
-    def step(self):
+    def step(self, flowposX, flowposY):
         poss = []
+        dists = []
 
-        for y in range(self.posY - 1 , self.posY + 1):
-            for x in range(self.posX - 1, self.posX + 1):
-                if self.path[y][x] == 0:
-                    poss.append([y, x])
+        if map[self.posY - 1][self.posX - 1] == 0:
+            poss.append([self.posY - 1, self.posX - 1])
+        if map[self.posY - 1][self.posX] == 0:
+            poss.append([self.posY - 1, self.posX])
+        if map[self.posY - 1][self.posX + 1] == 0:
+            poss.append([self.posY - 1, self.posX + 1])
 
-        self.posX, self.posY = random.choice(poss)
+        if map[self.posY][self.posX - 1] == 0:
+            poss.append([self.posY, self.posX - 1])
+        if map[self.posY][self.posX + 1] == 0:
+            poss.append([self.posY, self.posX + 1])
 
-    
+        if map[self.posY + 1][self.posX - 1] == 0:
+            poss.append([self.posY + 1, self.posX - 1])
+        if map[self.posY + 1][self.posX] == 0:
+            poss.append([self.posY + 1, self.posX])
+        if map[self.posY + 1][self.posX + 1] == 0:
+            poss.append([self.posY + 1, self.posX + 1])
+
+        for pos in poss:
+            dists.append(self.calcDist(flowposX, flowposY))
+
+        nearest = 9999999999999
+        index = 0
+        for i in range(0, len(dists)):
+            if dists[i] <= nearest:
+                nearest = dists[i]
+                index = i
+
+        self.posX, self.posY = poss[i]
+
+    def calcDist(self, flowposX, flowposY) -> int:
+        return math.sqrt(abs((flowposY - self.posY))**2 + abs((flowposX - self.posX))**2)
+
+
+
 
     

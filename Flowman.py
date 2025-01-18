@@ -75,7 +75,7 @@ def rot_center(image, rect, angle):
     rot_rect = rot_image.get_rect(center=rect.center)
     return rot_image,rot_rect
 
-one = Enemy(1, 1, map)
+one = Enemy(1, 1)
 
 # CELLS : 1-PACGUM 0-PELLET 3-MUR
 running = True
@@ -85,7 +85,7 @@ while running:
 
     char_images = flowman.image_at((animationIndexX*32, animationIndexY*32, 32, 32))
 
-    one.step()
+    one.step(posX, posY)
 
     animationIndexX += 1
 
