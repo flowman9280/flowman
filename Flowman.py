@@ -75,10 +75,16 @@ def rot_center(image, rect, angle):
     rot_rect = rot_image.get_rect(center=rect.center)
     return rot_image,rot_rect
 
+
+def win():
+    pass
+
+
 one = Enemy(1, 1)
 
 # CELLS : 1-PACGUM 0-PELLET 3-MUR
 running = True
+p = 0
 while running:
     time.sleep(GAMECLOCK)
     screen.fill(BACKGROUND_COLOR)
@@ -148,6 +154,8 @@ while running:
                         screen.blit(mur, (x*32, y*32))
                     case 0:
                         screen.blit(skelette, (x*32, y*32))
+                    case 9:
+                        screen.blit(skelette, (x*32, y*32))
 
     if posX == 5 and posY == -1:
         posX = 5
@@ -167,9 +175,14 @@ while running:
 
     if map[posY][posX] == 0:
         map[posY][posX] = 8
+        p += 1
+    if p == 452:
+        win()
 
     if map[posY][posX] == 0:
         rage()
+
+    
 
     pygame.display.flip()
     clock.tick(60)
