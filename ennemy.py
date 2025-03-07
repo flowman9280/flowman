@@ -43,16 +43,16 @@ class Enemy():
 
         eposX = self.eposX
         eposY = self.eposY
-        if map[eposY + 1][eposX] == 0 or map[eposY + 1][eposX] == 8:
+        if map[eposY + 1][eposX] != 3 or map[eposY + 1][eposX] == 8:
             poss.append([eposY + 1, eposX])
 
-        if map[eposY - 1][eposX] == 0 or map[eposY - 1][eposX] == 8:
+        if map[eposY - 1][eposX] != 3 or map[eposY - 1][eposX] == 8:
             poss.append([eposY - 1, eposX])
 
-        if map[eposY][eposX + 1] == 0 or map[eposY][eposX + 1] == 8:
+        if map[eposY][eposX + 1] != 3 or map[eposY][eposX + 1] == 8:
             poss.append([eposY, eposX + 1])
 
-        if map[eposY][eposX - 1] == 0 or map[eposY][eposX - 1] == 8:
+        if map[eposY][eposX - 1] != 3 or map[eposY][eposX - 1] == 8:
             poss.append([eposY, eposX - 1])
 
         newPos = random.choice(poss)

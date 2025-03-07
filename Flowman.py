@@ -28,7 +28,8 @@ skelette = pygame.image.load("Sprite\squelette.png")
 mur = pygame.image.load("flow_man sprite\decor\pac-mur.png")
 flowman = spritesheet("flow_man sprite\\flowman.png")
 char_images = flowman.image_at((0, 0, 32, 32))
-pellet = pygame.image.load("")
+pellet = pygame.image.load("louis\pelette.png")
+pacgum = pygame.image.load("louis\\arduino.png")
 
 # Initial stats
 pface = 0
@@ -45,8 +46,6 @@ def move_up():
     newPos = (posY - 1)
     if map[posY - 1][posX] != 3:
         posY = newPos
-    else:
-        face = pface 
 
 
 
@@ -65,8 +64,7 @@ def move_left():
     newPos = (posX - 1)
     if map[posY][posX - 1] != 3:
         posX = newPos
-    else:
-        face = pface 
+
 
 
 def move_right():
@@ -74,8 +72,7 @@ def move_right():
     newPos = (posX + 1)
     if map[posY][posX + 1] != 3:
         posX = newPos
-    else:
-        face = pface 
+
 
 
 def rage():
@@ -134,7 +131,6 @@ while running:
                 pface = face
                 if map[posY][posX + 1]  != 3:
                     face = 3
-                face = 3
 
             if event.key == pygame.K_UP:
                 pface = face
@@ -168,11 +164,13 @@ while running:
             x += 1
             if (x == posX) and (y == posY):
                 screen.blit(char_images, (x*32, y*32))
-            if (x == one.posX) and (y == one.posY):
+            if (x == one.eposX) and (y == one.eposY):
                 screen.blit(eye, (x*32, y*32))
                 pygame.quit
             else:
                 match cell:
+                    case 2:
+                        screen.blit(pacgum, (x*32, y*32))
                     case 3:
                         screen.blit(mur, (x*32, y*32))
                     case 0:
@@ -202,7 +200,8 @@ while running:
     if p == 452:
         win()
 
-    if map[posY][posX] == 0:
+    if map[posY][posX] == 2:
+        map[posY][posX] = 8
         rage()
 
     
