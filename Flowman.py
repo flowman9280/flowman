@@ -28,8 +28,10 @@ skelette = pygame.image.load("Sprite\squelette.png")
 mur = pygame.image.load("flow_man sprite\decor\pac-mur.png")
 flowman = spritesheet("flow_man sprite\\flowman.png")
 char_images = flowman.image_at((0, 0, 32, 32))
+pellet = pygame.image.load("")
 
 # Initial stats
+pface = 0
 posX = 20
 posY = 14
 newPos = 0
@@ -43,13 +45,19 @@ def move_up():
     newPos = (posY - 1)
     if map[posY - 1][posX] != 3:
         posY = newPos
+    else:
+        face = pface 
+
 
 
 def move_down():
     global posY
+    global face
+    global pface
     newPos = (posY + 1)
     if map[posY + 1][posX] != 3:
         posY = newPos
+    
 
 
 def move_left():
@@ -57,6 +65,8 @@ def move_left():
     newPos = (posX - 1)
     if map[posY][posX - 1] != 3:
         posX = newPos
+    else:
+        face = pface 
 
 
 def move_right():
@@ -64,10 +74,13 @@ def move_right():
     newPos = (posX + 1)
     if map[posY][posX + 1] != 3:
         posX = newPos
+    else:
+        face = pface 
 
 
 def rage():
-    print("ok")
+    global rag
+    rag=1
 
 
 def rot_center(image, rect, angle):
@@ -113,16 +126,25 @@ while running:
         
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                face = 1
+                pface = face
+                if map[posY][posX - 1] != 3:
+                    face = 1
 
             if event.key == pygame.K_RIGHT:
+                pface = face
+                if map[posY][posX + 1]  != 3:
+                    face = 3
                 face = 3
 
             if event.key == pygame.K_UP:
-                face = 4
+                pface = face
+                if map[posY - 1][posX] != 3:
+                    face = 4
 
             if event.key == pygame.K_DOWN:
-                face = 2
+                pface = face
+                if map[posY + 1][posX] != 3:
+                    face = 2
 
     match face:
         case 1:
@@ -148,12 +170,13 @@ while running:
                 screen.blit(char_images, (x*32, y*32))
             if (x == one.posX) and (y == one.posY):
                 screen.blit(eye, (x*32, y*32))
+                pygame.quit
             else:
                 match cell:
                     case 3:
                         screen.blit(mur, (x*32, y*32))
                     case 0:
-                        screen.blit(skelette, (x*32, y*32))
+                        screen.blit(pellet, (x*32, y*32))
                     case 9:
                         screen.blit(skelette, (x*32, y*32))
 
