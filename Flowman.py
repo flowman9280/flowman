@@ -2,11 +2,11 @@
 import random, pygame, time
 from map import map
 from spritesheet import spritesheet
-from ennemy import Enemy
+from ennemies import Enemy
 
 # CONSTANTS
 GAMECLOCK = 0.15
-COLOR = (255, 100, 98)
+COLOR = (255, 100, 98)  
 RED = (255, 0, 0)
 WHITE = (255, 255 ,255)
 BLUE = (0 , 255 ,0 )
@@ -31,6 +31,8 @@ char_images = flowman.image_at((0, 0, 32, 32))
 pellet = pygame.image.load("louis\pelette.png")
 pacgum = pygame.image.load("louis\\arduino.png")
 
+gameoverScreen = spritesheet("nouveauflow-man\\bouton-menu.png").image_at((0,0,1280,736))
+
 # Initial stats
 pface = 0
 posX = 20
@@ -39,6 +41,8 @@ newPos = 0
 face = 1
 animationIndexX = 0
 animationIndexY = 0
+rag = False
+score = 0
 
 # Flowman functions
 def move_up():
@@ -76,8 +80,7 @@ def move_right():
 
 
 def rage():
-    global rag
-    rag=1
+    rag = True
 
 
 def rot_center(image, rect, angle):
@@ -85,23 +88,36 @@ def rot_center(image, rect, angle):
     rot_rect = rot_image.get_rect(center=rect.center)
     return rot_image,rot_rect
 
+def gameover():
+    pygame.quit()
+
 
 def win():
     pass
 
-
-one = Enemy(1, 1)
+ennemys = []
+ennemyNb = 4
+for i in range(ennemyNb):
+    ennemys.append(Enemy(18,11))
 
 # CELLS : 1-PACGUM 0-PELLET 3-MUR
 running = True
 p = 0
+temps = 0
+cycle = 0
 while running:
+    cycle += 1
+    score += 69
+    print(score)
+    if cycle%30 == 0:
+        ennemys.append(Enemy(18,11))
     time.sleep(GAMECLOCK)
     screen.fill(BACKGROUND_COLOR)
 
     char_images = flowman.image_at((animationIndexX*32, animationIndexY*32, 32, 32))
 
-    one.step(posX, posY)
+    for i in ennemys:
+        i.step(posX, posY, rag)
 
     animationIndexX += 1
 
@@ -164,9 +180,13 @@ while running:
             x += 1
             if (x == posX) and (y == posY):
                 screen.blit(char_images, (x*32, y*32))
-            if (x == one.eposX) and (y == one.eposY):
-                screen.blit(eye, (x*32, y*32))
-                pygame.quit
+            for i in ennemys:
+                if (x == i.eposX) and (y == i.eposY):
+                    screen.blit(eye, (x*32, y*32))
+
+                if posX == i.eposX and posY == i.eposY and not rag:
+                    gameover()
+
             else:
                 match cell:
                     case 2:
@@ -203,7 +223,10 @@ while running:
     if map[posY][posX] == 2:
         map[posY][posX] = 8
         rage()
-
+    if rag == 1:
+        temps= temps + 1
+    if temps == 60:
+        rag = 0
     
 
     pygame.display.flip()

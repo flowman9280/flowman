@@ -1,8 +1,14 @@
 import random
 import math
+import pygame
+import config
 from map import map
 
-class Enemy():
+
+def revenir_a_cage():
+    print("ok")
+
+class Enemy:
     eposY = 0
     eposX = 0
     
@@ -16,7 +22,7 @@ class Enemy():
         self.eposX = eposX
         self.eposY = eposY
 
-    def step(self, floweposX, flowposY):
+    def step(self, floweposX, flowposY, rag):
 
         if self.eposX == 5 and self.eposY == -1:
             self.eposX = 5
@@ -62,8 +68,9 @@ class Enemy():
 
         self.oldePosX, self.oldPosY = self.eposX, self.eposY
         self.eposX, self.eposY = newPos[1], newPos[0]
-        
-        
+        if floweposX == self.eposX and flowposY == self.eposY and rag:
+            revenir_a_cage()
+    
         return
 
         if poss[0][1] != -1 and self.calcDist(poss[0]) <= self.calcDist(poss[1]) and self.calcDist(poss[0]) <= self.calcDist(poss[2]) and self.calcDist(poss[0]) <= self.calcDist(poss[3]):
