@@ -1,9 +1,9 @@
 # Importing librarys
-import random, pygame, time
+import random, time, config, pygame
 from map import map
 from spritesheet import spritesheet
 from ennemies import Enemy
-
+config.init()
 # CONSTANTS
 GAMECLOCK = 0.15
 COLOR = (255, 100, 98)  
@@ -35,52 +35,45 @@ gameoverScreen = spritesheet("nouveauflow-man\\bouton-menu.png").image_at((0,0,1
 
 # Initial stats
 pface = 0
-posX = 20
-posY = 14
 newPos = 0
 face = 1
 animationIndexX = 0
 animationIndexY = 0
-rag = False
 score = 0
 
 # Flowman functions
 def move_up():
-    global posY
-    newPos = (posY - 1)
-    if map[posY - 1][posX] != 3:
-        posY = newPos
+    newPos = (config.posY - 1)
+    if map[config.posY - 1][config.posX] != 3:
+        config.posY = newPos
 
 
 
 def move_down():
-    global posY
     global face
     global pface
-    newPos = (posY + 1)
-    if map[posY + 1][posX] != 3:
-        posY = newPos
+    newPos = (config.posY + 1)
+    if map[config.posY + 1][config.posX] != 3:
+        config.posY = newPos
     
 
 
 def move_left():
-    global posX
-    newPos = (posX - 1)
-    if map[posY][posX - 1] != 3:
-        posX = newPos
+    newPos = (config.posX - 1)
+    if map[config.posY][config.posX - 1] != 3:
+        config.posX = newPos
 
 
 
 def move_right():
-    global posX
-    newPos = (posX + 1)
-    if map[posY][posX + 1] != 3:
-        posX = newPos
+    newPos = (config.posX + 1)
+    if map[config.posY][config.posX + 1] != 3:
+        config.posX = newPos
 
 
 
 def rage():
-    rag = True
+    config.rag = True
 
 
 def rot_center(image, rect, angle):
@@ -89,7 +82,8 @@ def rot_center(image, rect, angle):
     return rot_image,rot_rect
 
 def gameover():
-    pygame.quit()
+    print("detected")
+    pygame.QUIT()
 
 
 def win():
@@ -117,7 +111,7 @@ while running:
     char_images = flowman.image_at((animationIndexX*32, animationIndexY*32, 32, 32))
 
     for i in ennemys:
-        i.step(posX, posY, rag)
+        i.step(config.posX, config.posY, config.rag)
 
     animationIndexX += 1
 
@@ -140,22 +134,22 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 pface = face
-                if map[posY][posX - 1] != 3:
+                if map[config.posY][config.posX - 1] != 3:
                     face = 1
 
             if event.key == pygame.K_RIGHT:
                 pface = face
-                if map[posY][posX + 1]  != 3:
+                if map[config.posY][config.posX + 1]  != 3:
                     face = 3
 
             if event.key == pygame.K_UP:
                 pface = face
-                if map[posY - 1][posX] != 3:
+                if map[config.posY - 1][config.posX] != 3:
                     face = 4
 
             if event.key == pygame.K_DOWN:
                 pface = face
-                if map[posY + 1][posX] != 3:
+                if map[config.posY + 1][config.posX] != 3:
                     face = 2
 
     match face:
@@ -178,13 +172,13 @@ while running:
         x = -1
         for cell in columns:
             x += 1
-            if (x == posX) and (y == posY):
+            if (x == config.posX) and (y == config.posY):
                 screen.blit(char_images, (x*32, y*32))
             for i in ennemys:
                 if (x == i.eposX) and (y == i.eposY):
                     screen.blit(eye, (x*32, y*32))
 
-                if posX == i.eposX and posY == i.eposY and not rag:
+                if config.posX == config.eposX and config.posY == config.eposY and not config.rag:
                     gameover()
 
             else:
@@ -198,38 +192,37 @@ while running:
                     case 9:
                         screen.blit(skelette, (x*32, y*32))
 
-    if posX == 5 and posY == -1:
-        posX = 5
-        posY = 22
+    if config.posX == 5 and config.posY == -1:
+        config.posX = 5
+        config.posY = 22
 
-    if posX == 5 and posY == 23:
-        posX = 5
-        posY = 0
+    if config.posX == 5 and config.posY == 23:
+        config.posX = 5
+        config.posY = 0
 
-    if posX == 34 and posY==-1:
-        posX = 34
-        posY = 22
+    if config.posX == 34 and config.posY==-1:
+        config.posX = 34
+        config.posY = 22
 
-    if posX == 34 and posY == 23:
-        posX = 34
-        posY = 0
+    if config.posX == 34 and config.posY == 23:
+        config.posX = 34
+        config.posY = 0
 
-    if map[posY][posX] == 0:
-        map[posY][posX] = 8
+    if map[config.posY][config.posX] == 0:
+        map[config.posY][config.posX] = 8
         p += 1
     if p == 452:
         win()
 
-    if map[posY][posX] == 2:
-        map[posY][posX] = 8
+    if map[config.posY][config.posX] == 2:
+        map[config.posY][config.posX] = 8
         rage()
-    if rag == 1:
+    if config.rag == 1:
         temps= temps + 1
     if temps == 60:
-        rag = 0
+        config.rag = 0
     
-
     pygame.display.flip()
     clock.tick(60)
-
+    print(config.eposX)
 pygame.quit()

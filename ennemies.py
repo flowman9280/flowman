@@ -1,17 +1,16 @@
 import random
 import math
-import pygame
 import config
+import pygame
 from map import map
 
 
 def revenir_a_cage():
     print("ok")
 
-class Enemy:
-    eposY = 0
+class Enemy:  
     eposX = 0
-    
+    eposY = 0 
     oldPosY = 0
     oldePosX = 0
 
