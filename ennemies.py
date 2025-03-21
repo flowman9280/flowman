@@ -39,13 +39,16 @@ class Enemy:
             self.eposX = 34
             self.eposY = 0
 
-        self.floweposX = floweposX
-        self.flowposY = flowposY
 
         moved: bool = False
 
         poss = []
-
+        if floweposX == self.eposX and flowposY == self.eposY:
+            if rag:
+                revenir_a_cage()
+            else:
+                config.gameover = True
+        
         eposX = self.eposX
         eposY = self.eposY
         if map[eposY + 1][eposX] != 3 or map[eposY + 1][eposX] == 8:
@@ -67,8 +70,8 @@ class Enemy:
 
         self.oldePosX, self.oldPosY = self.eposX, self.eposY
         self.eposX, self.eposY = newPos[1], newPos[0]
-        if floweposX == self.eposX and flowposY == self.eposY and rag:
-            revenir_a_cage()
+
+
     
         return
 

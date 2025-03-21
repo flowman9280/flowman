@@ -5,6 +5,7 @@ from spritesheet import spritesheet
 from ennemies import Enemy
 config.init()
 # CONSTANTS
+#GAMECLOCK = 0.15
 GAMECLOCK = 0.15
 COLOR = (255, 100, 98)  
 RED = (255, 0, 0)
@@ -25,9 +26,38 @@ clock = pygame.time.Clock()
 # Content loading
 eye = pygame.image.load("Sprite\Skelette2.png")
 skelette = pygame.image.load("Sprite\squelette.png")
+
 mur = pygame.image.load("flow_man sprite\decor\pac-mur.png")
+mur2 = pygame.image.load("nouveauflow-man\pac lierre.png")
+mur3 = pygame.image.load("nouveauflow-man\pac factorio.png")
+mur4 = pygame.image.load("nouveauflow-man\pac pupper fish.png")
+mur5 = pygame.image.load("nouveauflow-man\decor\pac-mur-creeper.png")
+mur6 = pygame.image.load("nouveauflow-man\decor\pac-mur-fissure.png")
+murs = []
+
+murDensity = 45
+mur2Density = 8
+mur3Density = 2
+mur4Density = 1
+mur5Density = 1
+mur6Density = 3
+for i in range(murDensity):
+    murs.append(mur)
+for i in range(mur2Density):
+    murs.append(mur2)
+for i in range(mur3Density):
+    murs.append(mur3)
+for i in range(mur4Density):
+    murs.append(mur4)
+for i in range(mur5Density):
+    murs.append(mur5)
+for i in range(mur6Density):
+    murs.append(mur6)
+
 flowman = spritesheet("flow_man sprite\\flowman.png")
+angryflowman = spritesheet("flow_man sprite\\pac-man super enerve.png")
 char_images = flowman.image_at((0, 0, 32, 32))
+
 pellet = pygame.image.load("louis\pelette.png")
 pacgum = pygame.image.load("louis\\arduino.png")
 
@@ -71,9 +101,15 @@ def move_right():
         config.posX = newPos
 
 
+rageFrameCount = 60
+global rageFrames
+rageFrames = 0
 
 def rage():
+    global rageFrames
     config.rag = True
+    rageFrames = rageFrameCount
+    print("detected")
 
 
 def rot_center(image, rect, angle):
@@ -81,9 +117,31 @@ def rot_center(image, rect, angle):
     rot_rect = rot_image.get_rect(center=rect.center)
     return rot_image,rot_rect
 
+wave = pygame.image.load("nouveau flow-man\\nouveau flow-man\soleil-final.png")
+start = pygame.image.load("nouveauflow-man\decor\\bouton-start.png")
+exit = pygame.image.load("nouveauflow-man\decor\\bouton-exit.png")
+
 def gameover():
-    print("detected")
-    pygame.QUIT()
+    print("Score final : {score}".format(score=score))
+    inGameover = True
+    while inGameover:
+        time.sleep(GAMECLOCK)
+
+        screen.fill(BACKGROUND_COLOR)
+        screen.blit(start, (-73  , 0))
+        screen.blit(exit, (-73  , 80))
+
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouseX = pygame.mouse.get_pos()[0]
+                mouseY = pygame.mouse.get_pos()[1]
+                if mouseX >= 579 and mouseX <= 701 and mouseY >= 392 and mouseY <= 439:
+                    inGameover = False
+                if mouseX >= 588 and mouseX <= 697 and mouseY >= 478 and mouseY <= 516:
+                    pygame.quit()
+
+    pygame.display.flip()
+    clock.tick(60)
 
 
 def win():
@@ -99,16 +157,56 @@ running = True
 p = 0
 temps = 0
 cycle = 0
+
+seed = random.random()
+
+startClick = 0
+
+inMenu = True
+while inMenu:
+    time.sleep(GAMECLOCK)
+
+    screen.blit(wave, (0, 0))
+    screen.blit(start, (-73  , 0))
+    screen.blit(exit, (-73  , 80))
+
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouseX = pygame.mouse.get_pos()[0]
+            mouseY = pygame.mouse.get_pos()[1]
+            if mouseX >= 579 and mouseX <= 701 and mouseY >= 392 and mouseY <= 439:
+                inMenu = False
+            if mouseX >= 588 and mouseX <= 697 and mouseY >= 478 and mouseY <= 516:
+                pygame.quit()
+
+    pygame.display.flip()
+    clock.tick(60)
+
+
 while running:
+
+    if rageFrames > 0:
+        rageFrames -= 1
+    elif rageFrames <= 0:
+        rageFrames = 0
+        config.rag = False
+
+    if config.gameover:
+        gameover()
+
     cycle += 1
     score += 69
-    print(score)
+
     if cycle%30 == 0:
         ennemys.append(Enemy(18,11))
+
     time.sleep(GAMECLOCK)
     screen.fill(BACKGROUND_COLOR)
 
-    char_images = flowman.image_at((animationIndexX*32, animationIndexY*32, 32, 32))
+    if config.rag:
+        char_images = angryflowman.image_at((animationIndexX*32, animationIndexY*32, 32, 32))
+    else:
+        char_images = flowman.image_at((animationIndexX*32, animationIndexY*32, 32, 32))
 
     for i in ennemys:
         i.step(config.posX, config.posY, config.rag)
@@ -167,6 +265,7 @@ while running:
             move_up()
 
     y = -1
+    random.seed(seed)
     for columns in map:
         y += 1
         x = -1
@@ -178,15 +277,12 @@ while running:
                 if (x == i.eposX) and (y == i.eposY):
                     screen.blit(eye, (x*32, y*32))
 
-                if config.posX == config.eposX and config.posY == config.eposY and not config.rag:
-                    gameover()
-
             else:
                 match cell:
                     case 2:
                         screen.blit(pacgum, (x*32, y*32))
                     case 3:
-                        screen.blit(mur, (x*32, y*32))
+                        screen.blit(random.choice(murs), (x*32, y*32))
                     case 0:
                         screen.blit(pellet, (x*32, y*32))
                     case 9:
@@ -217,12 +313,7 @@ while running:
     if map[config.posY][config.posX] == 2:
         map[config.posY][config.posX] = 8
         rage()
-    if config.rag == 1:
-        temps= temps + 1
-    if temps == 60:
-        config.rag = 0
-    
+
     pygame.display.flip()
     clock.tick(60)
-    print(config.eposX)
 pygame.quit()
